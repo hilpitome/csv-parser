@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class CsvToObjConverter {
     private String filePath = "";
     private BufferedReader csvReader = null;
-    private String delimiter = ",";
+    private String delimiter = null;
     public CsvToObjConverter(){}
 
     public String getFilePath() {
