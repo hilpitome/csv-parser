@@ -1,13 +1,19 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CsvToObjConverter {
     private String filePath = "";
     private BufferedReader csvReader = null;
     private String delimiter = null;
-    public CsvToObjConverter(){}
+    private String[] columnKeys;
+    private List<DataObjectWrapper> customObjectList;
+    public CsvToObjConverter(){
+        customObjectList = new ArrayList<>();
+    }
 
     public String getFilePath() {
         return filePath;
@@ -29,10 +35,21 @@ public class CsvToObjConverter {
             csvReader = new BufferedReader(new FileReader(this.filePath));
             int index = 0;
             while ((row = csvReader.readLine()) != null) {
-//                String[] data = row.split(",");
                 if(index==0){
                     // create header row
-                    convertHeadersToUnderscoreKeys(row);
+                    this.columnKeys = convertHeadersToUnderscoreKeys(row);
+                } else {
+                    String[] data = row.split(delimiter);
+
+                    // create objects from the other raws
+                    DataObjectWrapper obj = new DataObjectWrapper();
+                    int j = 0;
+                    for (String k:this.columnKeys){
+                        obj.add(k, data[j]); // add current key value pair
+                        j++;
+                    }
+                    System.out.println(obj.objToString());
+                    customObjectList.add(obj); // add current obj to custom list of objects
 
                 }
                 index++;
@@ -61,7 +78,6 @@ public class CsvToObjConverter {
             headerRowArrPascaled[i] = insertUnderscores(headerRowArr[i]);
 
         }
-        System.out.println(Arrays.toString(headerRowArrPascaled));
         return  headerRowArrPascaled;
 
     }
