@@ -11,26 +11,42 @@ public class CsvToObjConverter {
     private String delimiter = null;
     private String[] columnKeys;
     private List<DataObjectWrapper> customObjectList;
+
+    /**
+     *  empty constructor
+     */
     public CsvToObjConverter(){
         customObjectList = new ArrayList<>();
     }
 
+
+    /**
+     * @return file path of the csv file
+     */
     public String getFilePath() {
         return filePath;
     }
 
+    /**
+     * @param delimiter type of seperator for the columns
+     */
     public void setDelimiter(String delimiter){
         this.delimiter = delimiter;
     }
 
+    /**
+     * @param filePath string url of the file to be processed
+     */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
 
     }
 
-    public void readFile(){
+    /**
+     * reads the file by iterating over each line and creates objects
+     */
+    public void convertFileToObjs(){
         String row = "";
-        System.out.println(this.filePath);
         try {
             csvReader = new BufferedReader(new FileReader(this.filePath));
             int index = 0;
@@ -39,6 +55,7 @@ public class CsvToObjConverter {
                     // create header row
                     this.columnKeys = convertHeadersToUnderscoreKeys(row);
                 } else {
+
                     String[] data = row.split(delimiter);
 
                     // create objects from the other raws
@@ -48,8 +65,7 @@ public class CsvToObjConverter {
                         obj.add(k, data[j]); // add current key value pair
                         j++;
                     }
-                    System.out.println(obj.objToString());
-                    customObjectList.add(obj); // add current obj to custom list of objects
+                    this.customObjectList.add(obj); // add current obj to custom list of objects
 
                 }
                 index++;
@@ -60,9 +76,7 @@ public class CsvToObjConverter {
         }
     }
 
-    public void convertFileToObjs(){
 
-    }
 
     /**
      * @param row header row of the csv not yet split by the delimeter
@@ -71,7 +85,6 @@ public class CsvToObjConverter {
     public String[] convertHeadersToUnderscoreKeys(String row){
 
         String[] headerRowArr = row.split(delimiter);
-        System.out.println(Arrays.toString(headerRowArr));
         String[] headerRowArrPascaled = new String[headerRowArr.length];
         for(int i = 0; i < headerRowArr.length; i++ ){
 
@@ -82,7 +95,19 @@ public class CsvToObjConverter {
 
     }
 
+    void printObjects(){
+        System.out.println("List of processed objects");
+        for (DataObjectWrapper object:
+             this.customObjectList) {
+
+            System.out.println(object.objToString());
+
+        }
+    }
+
     private String insertUnderscores(String text) {
        return String.join("_", text.toLowerCase().split(" "));
     }
+
+
 }

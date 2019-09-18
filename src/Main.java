@@ -9,7 +9,8 @@ public class Main {
         String delimeter = promptForCsvDelimeter();
         converter.setDelimiter(delimeter);
         converter.setFilePath("C2ImportCalEventSample.csv");
-        converter.readFile();
+        converter.convertFileToObjs();
+        converter.printObjects();
 
     }
 
