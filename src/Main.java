@@ -1,7 +1,9 @@
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        CsvToObjConverter converter = new CsvToObjConverter();
+        converter.initFileReader("C2ImportFamRelSample.csv");
+        converter.readFile();
 
     }
 }
